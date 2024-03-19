@@ -1,0 +1,17 @@
+Hi Rasba, your overall code looks great. Here are some feedback
+
+1. Data inspection
+Good use of libraries like tidyverse, dplyr, and RColorBrewer which are essential for data manipulation and visualization.
+Efficient initial data inspection using dim(), file.info(), and sum(is.na()) to understand the dataset's structure and cleanliness.
+Consider adding stringsAsFactors = FALSE to avoid unintended factor conversion.
+
+2. Data processing
+The subsetting and transposition steps are well-organized and appropriately executed.
+Good use of looping for processing and exporting chromosome-specific data.
+
+3. Data visuakization:
+Creative use of ggplot2 for diverse data visualization types, showcasing an excellent grasp of the package's capabilities.
+Effective data transformation with pivot_longer() to prepare data for visualization.
+Adding more detailed titles, axis labels, and legends to the plots can significantly enhance interpretability.
+
+Overall, the script demonstrates solid data manipulation and visualization skills. The author has shown proficiency in using R for detailed genetic data analysis. 
