@@ -116,12 +116,26 @@ colnames(chrom_data) <- c('maize', 'teosinte')
 chrom_data_2 <- pivot_longer(chrom_data, cols=c('maize', 'teosinte'), names_to = 'group', values_to = 'Chromosome')
 
 #forming plot
-chrom_plot <- ggplot(chrom_data_2, aes(fill=Chromosome,x = group)) + geom_bar(position = "dodge")
+chrom_plot <- ggplot(chrom_data_2, aes(fill=Chromosome,x = group)) + geom_bar(position = "dodge") +   ggtitle("Number of samples per chromosome per group")
 chrom_plot + scale_fill_brewer(palette = 'Paired')
 
 
 #adding new column for homozygous or not
 homozygous <- c("A/A", "C/C", "T/T", "G/G")
+
+##Plotting homozygous vs heterozygous sites for each sample (referenced Panchali's code to add)
+fang_het <- 
+  fang %>% pivot_longer(!Sample_ID) %>%
+  mutate(Homozygous = ifelse(value %in% homozygous, "Homozygote", ifelse(value == "NA", "?/?", "Heterozygote")))
+
+fang_plot <- fang_het %>% group_by(Sample_ID) %>% count(Homozygous) %>%
+  ggplot(aes(fill = Homozygous, y = n, x = Sample_ID)) +
+  geom_bar(position = "fill", stat = "identity") +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+fang_plot
 
 #subsetting site columns
 merged_maize_x <- maize_merged[ , grepl("X",names(maize_merged))]
@@ -139,6 +153,7 @@ merged_teo_x <- merged_teo_x %>%
 merged_teo_x <- apply(merged_teo_x,2,as.character)
 
 
+
 #Plotting homozygous vs heterozygous sites for each group
 merged_maize_x <- as.data.frame(merged_maize_x)
 maize_x <- data.frame(merged_maize_x$Homozygous)
@@ -153,6 +168,8 @@ x_data_2 <- pivot_longer(x_data,cols=c('maize', 'teosinte'),names_to = 'group', 
 
 het_plot <- ggplot(x_data_2,aes(fill=Homozygous,x=group)) + geom_bar() + geom_text(stat='count',aes(label=after_stat(count)),size = 3, position = position_stack(vjust = 0.5))
 het_plot + scale_fill_manual(values = c( "#ed9256","#9071ad"))
+
+
 
 #Creating binned column
 snp_pos <- data.frame(snp$Chromosome,snp$Position)
